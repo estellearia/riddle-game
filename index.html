@@ -1,19 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>LD Relationship Riddle Game</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-body {
-  background: black;
-  margin: 0; 
-  padding: 20px;
-  font-family: 'Press Start 2P', monospace;
-  color: white;
-}
 
 .riddle-box {
   background: black;
@@ -21,7 +7,9 @@ body {
   padding: 24px;
   max-width: 400px;
   margin: 0 auto;
+  font-family: 'Press Start 2P', monospace;
   font-size: 10px;
+  color: white;
   line-height: 1.8;
   text-align: left;
   display: none;
@@ -86,8 +74,6 @@ body {
   color: #ccc;
 }
 </style>
-</head>
-<body>
 
 <div id="riddle1" class="riddle-box active">
   <img class="riddle-avatar" src="https://i.imgur.com/9OC7GRw.gif" alt="Aria" />
@@ -135,54 +121,42 @@ body {
 
 <script>
 const riddles = {
-  1: { answer: "connection", tries: 0 },
-  2: { answer: "heart", tries: 0 },
-  3: { answer: "safe place", tries: 0 }
+  1: { answer: "connection", revealed: [] },
+  2: { answer: "heart", revealed: [] },
+  3: { answer: "safe place", revealed: [] }
 };
 
-  function getHint(answer, tries) {
-  if (tries === 0) return "";
-  
-  const lettersToReveal = tries;
-  const answerLetters = answer.split('');
-  const revealedIndices = new Set();
-  
-  // Always reveal spaces
-  for (let i = 0; i < answerLetters.length; i++) {
-    if (answerLetters[i] === ' ') {
-      revealedIndices.add(i);
+function getRandomHiddenIndex(answer, revealed) {
+  const indices = [];
+  for (let i = 0; i < answer.length; i++) {
+    if (answer[i] !== " " && !revealed.includes(i)) {
+      indices.push(i);
     }
   }
-  
-  // Randomly pick letters to reveal, avoiding duplicates
-  while (revealedIndices.size < lettersToReveal + answer.split(' ').length - 1) {
-    const randIndex = Math.floor(Math.random() * answerLetters.length);
-    if (answerLetters[randIndex] !== ' ') {
-      revealedIndices.add(randIndex);
-    }
-  }
-  
-  let revealed = '';
-  for (let i = 0; i < answerLetters.length; i++) {
-    if (revealedIndices.has(i)) {
-      revealed += answerLetters[i].toUpperCase();
-    } else if (answerLetters[i] === ' ') {
-      revealed += ' ';
-    } else {
-      revealed += '_';
-    }
-  }
-  
-  return revealed;
+  if (indices.length === 0) return null;
+  return indices[Math.floor(Math.random() * indices.length)];
 }
 
-
+function getHint(answer, revealed) {
+  let hint = "";
+  for (let i = 0; i < answer.length; i++) {
+    if (answer[i] === " ") {
+      hint += " ";
+    } else if (revealed.includes(i)) {
+      hint += answer[i].toUpperCase();
+    } else {
+      hint += "_";
+    }
+  }
+  return hint;
+}
 
 function checkAnswer(number) {
   const input = document.getElementById(`input${number}`).value.trim().toLowerCase();
   const feedback = document.getElementById(`feedback${number}`);
   const hintBox = document.getElementById(`hint${number}`);
-  const correct = riddles[number].answer;
+  const riddle = riddles[number];
+  const correct = riddle.answer;
 
   if (!input) {
     feedback.textContent = "Try typing something first.";
@@ -191,12 +165,11 @@ function checkAnswer(number) {
   }
 
   if (input === correct) {
-    let solvedMsg;
-    if (number === 1) solvedMsg = "That’s what keeps us close.";
-    else if (number === 2) solvedMsg = "Yours, always.";
-    else solvedMsg = "You found it — just like you always do.";
-
-    feedback.textContent = solvedMsg;
+    feedback.textContent = number === 3
+      ? "You found it — just like you always do."
+      : number === 2
+      ? "Yours, always."
+      : "That’s what keeps us close.";
     feedback.style.color = "#00ff00";
     hintBox.textContent = "";
 
@@ -210,10 +183,15 @@ function checkAnswer(number) {
       }
     }, 2000);
   } else {
-    riddles[number].tries += 1;
+    // Add a new random unrevealed letter
+    const index = getRandomHiddenIndex(correct, riddle.revealed);
+    if (index !== null) {
+      riddle.revealed.push(index);
+    }
+
     feedback.textContent = "That doesn’t feel right.";
     feedback.style.color = "red";
-    hintBox.textContent = "Hint: " + getHint(correct, riddles[number].tries);
+    hintBox.textContent = "Hint: " + getHint(correct, riddle.revealed);
   }
 }
 
@@ -225,6 +203,3 @@ document.querySelectorAll(".riddle-input").forEach((inputEl, index) => {
   });
 });
 </script>
-
-</body>
-</html>
