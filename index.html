@@ -5,185 +5,226 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>LD Relationship Riddle Game</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-  body {
-    background: black;
-    color: white;
-    font-family: 'Press Start 2P', monospace;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    padding: 20px;
-  }
+body {
+  background: black;
+  margin: 0; 
+  padding: 20px;
+  font-family: 'Press Start 2P', monospace;
+  color: white;
+}
 
-  .riddle-box {
-    background: black;
-    border: 2px solid white;
-    padding: 24px;
-    max-width: 400px;
-    width: 100%;
-    box-sizing: border-box;
-    text-align: left;
-  }
+.riddle-box {
+  background: black;
+  border: 2px solid white;
+  padding: 24px;
+  max-width: 400px;
+  margin: 0 auto;
+  font-size: 10px;
+  line-height: 1.8;
+  text-align: left;
+  display: none;
+}
 
-  .riddle-avatar {
-    width: 64px;
-    height: 64px;
-    image-rendering: pixelated;
-    display: block;
-    margin: 0 auto 12px auto;
-  }
+.riddle-box.active {
+  display: block;
+}
 
-  .riddle-name {
-    color: #00ffff;
-    font-weight: bold;
-    margin-bottom: 12px;
-  }
+.riddle-avatar {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+  display: block;
+  margin: 0 auto 12px auto;
+}
 
-  .riddle-text {
-    margin-bottom: 16px;
-    font-size: 10px;
-    line-height: 1.8;
-  }
+.riddle-name {
+  color: #00ffff;
+  font-weight: bold;
+  margin-bottom: 12px;
+  text-align: left;
+}
 
-  .riddle-input {
-    width: 100%;
-    padding: 8px;
-    background: black;
-    border: 2px solid white;
-    color: white;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 10px;
-    margin-bottom: 12px;
-    box-sizing: border-box;
-    text-align: center;
-  }
+.riddle-text {
+  margin-bottom: 16px;
+}
 
-  .riddle-button {
-    width: 100%;
-    padding: 10px;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 10px;
-    background: #222;
-    color: white;
-    border: 2px solid white;
-    cursor: pointer;
-  }
+.riddle-input {
+  width: 100%;
+  padding: 8px;
+  background: black;
+  border: 2px solid white;
+  color: white;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  text-align: center;
+}
 
-  .riddle-feedback {
-    margin-top: 12px;
-    font-weight: bold;
-    min-height: 20px;
-    font-size: 10px;
-  }
+.riddle-button {
+  width: 100%;
+  padding: 10px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  background: #222;
+  color: white;
+  border: 2px solid white;
+  cursor: pointer;
+}
+
+.riddle-feedback {
+  margin-top: 12px;
+  font-weight: bold;
+  min-height: 20px;
+}
+
+.riddle-hint {
+  margin-top: 6px;
+  font-size: 9px;
+  color: #ccc;
+}
 </style>
 </head>
 <body>
-<div class="riddle-box">
+
+<div id="riddle1" class="riddle-box active">
   <img class="riddle-avatar" src="https://i.imgur.com/9OC7GRw.gif" alt="Aria" />
   <div class="riddle-name">Aria:</div>
-  <div id="riddleText" class="riddle-text">
+  <div class="riddle-text">
     “You can’t see it, but it holds tight,<br>
     Across the dark, across the night.<br>
     Unbroken bond that distance hides —<br>
     What’s the name of what still ties?”
   </div>
-  <input id="riddleInput" class="riddle-input" type="text" placeholder="Type your answer..." />
-  <button class="riddle-button" id="submitBtn">Submit</button>
-  <div id="riddleFeedback" class="riddle-feedback"></div>
+  <input class="riddle-input" id="input1" type="text" placeholder="Type your answer..." />
+  <button class="riddle-button" onclick="checkAnswer(1)">Submit</button>
+  <div class="riddle-feedback" id="feedback1"></div>
+  <div class="riddle-hint" id="hint1"></div>
+</div>
+
+<div id="riddle2" class="riddle-box">
+  <img class="riddle-avatar" src="https://i.imgur.com/9OC7GRw.gif" alt="Aria" />
+  <div class="riddle-name">Aria:</div>
+  <div class="riddle-text">
+    “Mine races when I see your name,<br>
+    and yet we’ve never touched the same.<br>
+    Still, something beats and knows it’s true —<br>
+    what part of me belongs to you?”
+  </div>
+  <input class="riddle-input" id="input2" type="text" placeholder="Type your answer..." />
+  <button class="riddle-button" onclick="checkAnswer(2)">Submit</button>
+  <div class="riddle-feedback" id="feedback2"></div>
+  <div class="riddle-hint" id="hint2"></div>
+</div>
+
+<div id="riddle3" class="riddle-box">
+  <img class="riddle-avatar" src="https://i.imgur.com/9OC7GRw.gif" alt="Aria" />
+  <div class="riddle-name">Aria:</div>
+  <div class="riddle-text">
+    “When the world gets loud and hearts beat fast,<br>
+    where do we go to make time pass?”<br><br>
+    <i>(It’s not warmth or silence alone... it’s what <b>we</b> are to each other.)</i>
+  </div>
+  <input class="riddle-input" id="input3" type="text" placeholder="Type your answer..." />
+  <button class="riddle-button" onclick="checkAnswer(3)">Submit</button>
+  <div class="riddle-feedback" id="feedback3"></div>
+  <div class="riddle-hint" id="hint3"></div>
 </div>
 
 <script>
-  const riddles = [
-    {
-      question: `“You can’t see it, but it holds tight,<br>
-    Across the dark, across the night.<br>
-    Unbroken bond that distance hides —<br>
-    What’s the name of what still ties?”`,
-      answer: 'connection',
-      hints: ['C________N', 'C_N_E__I_N', 'CONNECTION']
-    },
-    {
-      question: `"Mine races when I see your name,<br>
-    and yet we’ve never touched the same.<br>
-    Still, something beats and knows it’s true —<br>
-    what part of me belongs to you?"`,
-      answer: 'heart',
-      hints: ['H____', 'HE__T', 'HEART']
-    },
-    {
-      question: `"When the world gets loud and hearts beat fast,<br>
-    where do we go to make time pass?”<br><br>
-    <i>(It’s not warmth or silence alone... it’s what *we* are to each other.)</i>`,
-      answer: 'safe place',
-      hints: ['S___ P____', 'SA__ PL__', 'SAFE PLACE']
+const riddles = {
+  1: { answer: "connection", tries: 0 },
+  2: { answer: "heart", tries: 0 },
+  3: { answer: "safe place", tries: 0 }
+};
+
+  function getHint(answer, tries) {
+  if (tries === 0) return "";
+  
+  const lettersToReveal = tries;
+  const answerLetters = answer.split('');
+  const revealedIndices = new Set();
+  
+  // Always reveal spaces
+  for (let i = 0; i < answerLetters.length; i++) {
+    if (answerLetters[i] === ' ') {
+      revealedIndices.add(i);
     }
-  ];
-
-  let currentRiddle = 0;
-  let hintIndex = 0;
-
-  const riddleText = document.getElementById('riddleText');
-  const riddleInput = document.getElementById('riddleInput');
-  const riddleFeedback = document.getElementById('riddleFeedback');
-  const submitBtn = document.getElementById('submitBtn');
-
-  function showRiddle(index) {
-    riddleText.innerHTML = riddles[index].question;
-    riddleInput.value = '';
-    riddleFeedback.textContent = '';
-    hintIndex = 0;
   }
-
-  function showHint() {
-    if (hintIndex < riddles[currentRiddle].hints.length) {
-      riddleFeedback.style.color = 'orange';
-      riddleFeedback.textContent = `Hint: ${riddles[currentRiddle].hints[hintIndex]}`;
-      hintIndex++;
+  
+  // Randomly pick letters to reveal, avoiding duplicates
+  while (revealedIndices.size < lettersToReveal + answer.split(' ').length - 1) {
+    const randIndex = Math.floor(Math.random() * answerLetters.length);
+    if (answerLetters[randIndex] !== ' ') {
+      revealedIndices.add(randIndex);
+    }
+  }
+  
+  let revealed = '';
+  for (let i = 0; i < answerLetters.length; i++) {
+    if (revealedIndices.has(i)) {
+      revealed += answerLetters[i].toUpperCase();
+    } else if (answerLetters[i] === ' ') {
+      revealed += ' ';
     } else {
-      riddleFeedback.style.color = 'red';
-      riddleFeedback.textContent = "That doesn’t feel right.";
+      revealed += '_';
     }
   }
+  
+  return revealed;
+}
 
-  function checkAnswer() {
-    const input = riddleInput.value.trim().toLowerCase();
-    if (!input) {
-      riddleFeedback.style.color = 'yellow';
-      riddleFeedback.textContent = 'Try typing something first.';
-      return;
-    }
 
-    if (input === riddles[currentRiddle].answer) {
-      if (currentRiddle === riddles.length - 1) {
-        riddleFeedback.style.color = '#00ff00';
-        riddleFeedback.textContent = 'You found it — just like you always do.';
-        setTimeout(() => {
-          window.location.href = '#decodecorrect';
-        }, 2000);
+
+function checkAnswer(number) {
+  const input = document.getElementById(`input${number}`).value.trim().toLowerCase();
+  const feedback = document.getElementById(`feedback${number}`);
+  const hintBox = document.getElementById(`hint${number}`);
+  const correct = riddles[number].answer;
+
+  if (!input) {
+    feedback.textContent = "Try typing something first.";
+    feedback.style.color = "yellow";
+    return;
+  }
+
+  if (input === correct) {
+    let solvedMsg;
+    if (number === 1) solvedMsg = "That’s what keeps us close.";
+    else if (number === 2) solvedMsg = "Yours, always.";
+    else solvedMsg = "You found it — just like you always do.";
+
+    feedback.textContent = solvedMsg;
+    feedback.style.color = "#00ff00";
+    hintBox.textContent = "";
+
+    setTimeout(() => {
+      document.getElementById(`riddle${number}`).classList.remove("active");
+
+      if (number === 3) {
+        window.location.href = "#decodecorrect";
       } else {
-        currentRiddle++;
-        showRiddle(currentRiddle);
-        riddleFeedback.style.color = '#00ff00';
-        riddleFeedback.textContent = 'Correct! Moving to the next riddle...';
+        document.getElementById(`riddle${number + 1}`).classList.add("active");
       }
-    } else {
-      showHint();
-    }
+    }, 2000);
+  } else {
+    riddles[number].tries += 1;
+    feedback.textContent = "That doesn’t feel right.";
+    feedback.style.color = "red";
+    hintBox.textContent = "Hint: " + getHint(correct, riddles[number].tries);
   }
+}
 
-  submitBtn.addEventListener('click', checkAnswer);
-  riddleInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      checkAnswer();
+document.querySelectorAll(".riddle-input").forEach((inputEl, index) => {
+  inputEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      checkAnswer(index + 1);
     }
   });
-
-  // Initialize first riddle
-  showRiddle(currentRiddle);
+});
 </script>
+
 </body>
 </html>
