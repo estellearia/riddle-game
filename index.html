@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LD Relationship Riddle Game</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+  body {
+    background: black;
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .riddle-box {
+    background: black;
+    border: 2px solid white;
+    padding: 24px;
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  .riddle-avatar {
+    width: 64px;
+    height: 64px;
+    image-rendering: pixelated;
+    display: block;
+    margin: 0 auto 12px auto;
+  }
+
+  .riddle-name {
+    color: #00ffff;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+
+  .riddle-text {
+    margin-bottom: 16px;
+    font-size: 10px;
+    line-height: 1.8;
+  }
+
+  .riddle-input {
+    width: 100%;
+    padding: 8px;
+    background: black;
+    border: 2px solid white;
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .riddle-button {
+    width: 100%;
+    padding: 10px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    background: #222;
+    color: white;
+    border: 2px solid white;
+    cursor: pointer;
+  }
+
+  .riddle-feedback {
+    margin-top: 12px;
+    font-weight: bold;
+    min-height: 20px;
+    font-size: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="riddle-box">
+  <img class="riddle-avatar" src="https://i.imgur.com/9OC7GRw.gif" alt="Aria" />
+  <div class="riddle-name">Aria:</div>
+  <div id="riddleText" class="riddle-text">
+    “You can’t see it, but it holds tight,<br>
+    Across the dark, across the night.<br>
+    Unbroken bond that distance hides —<br>
+    What’s the name of what still ties?”
+  </div>
+  <input id="riddleInput" class="riddle-input" type="text" placeholder="Type your answer..." />
+  <button class="riddle-button" id="submitBtn">Submit</button>
+  <div id="riddleFeedback" class="riddle-feedback"></div>
+</div>
+
+<script>
+  const riddles = [
+    {
+      question: `“You can’t see it, but it holds tight,<br>
+    Across the dark, across the night.<br>
+    Unbroken bond that distance hides —<br>
+    What’s the name of what still ties?”`,
+      answer: 'connection',
+      hints: ['C________N', 'C_N_E__I_N', 'CONNECTION']
+    },
+    {
+      question: `"Mine races when I see your name,<br>
+    and yet we’ve never touched the same.<br>
+    Still, something beats and knows it’s true —<br>
+    what part of me belongs to you?"`,
+      answer: 'heart',
+      hints: ['H____', 'HE__T', 'HEART']
+    },
+    {
+      question: `"When the world gets loud and hearts beat fast,<br>
+    where do we go to make time pass?”<br><br>
+    <i>(It’s not warmth or silence alone... it’s what *we* are to each other.)</i>`,
+      answer: 'safe place',
+      hints: ['S___ P____', 'SA__ PL__', 'SAFE PLACE']
+    }
+  ];
+
+  let currentRiddle = 0;
+  let hintIndex = 0;
+
+  const riddleText = document.getElementById('riddleText');
+  const riddleInput = document.getElementById('riddleInput');
+  const riddleFeedback = document.getElementById('riddleFeedback');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function showRiddle(index) {
+    riddleText.innerHTML = riddles[index].question;
+    riddleInput.value = '';
+    riddleFeedback.textContent = '';
+    hintIndex = 0;
+  }
+
+  function showHint() {
+    if (hintIndex < riddles[currentRiddle].hints.length) {
+      riddleFeedback.style.color = 'orange';
+      riddleFeedback.textContent = `Hint: ${riddles[currentRiddle].hints[hintIndex]}`;
+      hintIndex++;
+    } else {
+      riddleFeedback.style.color = 'red';
+      riddleFeedback.textContent = "That doesn’t feel right.";
+    }
+  }
+
+  function checkAnswer() {
+    const input = riddleInput.value.trim().toLowerCase();
+    if (!input) {
+      riddleFeedback.style.color = 'yellow';
+      riddleFeedback.textContent = 'Try typing something first.';
+      return;
+    }
+
+    if (input === riddles[currentRiddle].answer) {
+      if (currentRiddle === riddles.length - 1) {
+        riddleFeedback.style.color = '#00ff00';
+        riddleFeedback.textContent = 'You found it — just like you always do.';
+        setTimeout(() => {
+          window.location.href = '#decodecorrect';
+        }, 2000);
+      } else {
+        currentRiddle++;
+        showRiddle(currentRiddle);
+        riddleFeedback.style.color = '#00ff00';
+        riddleFeedback.textContent = 'Correct! Moving to the next riddle...';
+      }
+    } else {
+      showHint();
+    }
+  }
+
+  submitBtn.addEventListener('click', checkAnswer);
+  riddleInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      checkAnswer();
+    }
+  });
+
+  // Initialize first riddle
+  showRiddle(currentRiddle);
+</script>
+</body>
+</html>
