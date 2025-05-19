@@ -119,6 +119,7 @@
   <div class="riddle-hint" id="hint3"></div>
 </div>
 
+
 <script>
 const riddles = {
   1: { answer: "connection", revealed: [] },
@@ -177,13 +178,14 @@ function checkAnswer(number) {
       document.getElementById(`riddle${number}`).classList.remove("active");
 
       if (number === 3) {
-        window.location.href = "#decodecorrect";
+        // Redirect to #decodecorrect on last riddle success
+        window.location.hash = "#decodecorrect";
       } else {
         document.getElementById(`riddle${number + 1}`).classList.add("active");
       }
     }, 2000);
   } else {
-    // Add a new random unrevealed letter
+    // Add a new random unrevealed letter for hint
     const index = getRandomHiddenIndex(correct, riddle.revealed);
     if (index !== null) {
       riddle.revealed.push(index);
@@ -203,3 +205,4 @@ document.querySelectorAll(".riddle-input").forEach((inputEl, index) => {
   });
 });
 </script>
+
