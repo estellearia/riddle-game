@@ -1,3 +1,5 @@
+just do this github version please?
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -119,7 +121,6 @@
   <div class="riddle-hint" id="hint3"></div>
 </div>
 
-<!-- Make sure you have this somewhere on your page -->
 <div id="decodecorrect" style="margin-top: 50px; padding: 20px; color: #00ffff; font-family: 'Press Start 2P', monospace;">
   <h2>🎉 Congrats! You solved all the riddles! 🎉</h2>
 </div>
@@ -157,9 +158,9 @@ function getHint(answer, revealed) {
 }
 
 function checkAnswer(number) {
-  const input = document.getElementById(`input${number}`).value.trim().toLowerCase();
-  const feedback = document.getElementById(`feedback${number}`);
-  const hintBox = document.getElementById(`hint${number}`);
+  const input = document.getElementById(input${number}).value.trim().toLowerCase();
+  const feedback = document.getElementById(feedback${number});
+  const hintBox = document.getElementById(hint${number});
   const riddle = riddles[number];
   const correct = riddle.answer;
 
@@ -179,17 +180,12 @@ function checkAnswer(number) {
     hintBox.textContent = "";
 
     setTimeout(() => {
-      document.getElementById(`riddle${number}`).classList.remove("active");
+      document.getElementById(riddle${number}).classList.remove("active");
 
       if (number === 3) {
-        const target = document.getElementById("decodecorrect");
-        if (target) {
-          target.scrollIntoView({ behavior: "smooth" });
-        } else {
-          window.location.hash = "decodecorrect";
-        }
+        window.location.href = "#decodecorrect";
       } else {
-        document.getElementById(`riddle${number + 1}`).classList.add("active");
+        document.getElementById(riddle${number + 1}).classList.add("active");
       }
     }, 2000);
   } else {
