@@ -119,6 +119,11 @@
   <div class="riddle-hint" id="hint3"></div>
 </div>
 
+<!-- Make sure you have this somewhere on your page -->
+<div id="decodecorrect" style="margin-top: 50px; padding: 20px; color: #00ffff; font-family: 'Press Start 2P', monospace;">
+  <h2>🎉 Congrats! You solved all the riddles! 🎉</h2>
+</div>
+
 <script>
 const riddles = {
   1: { answer: "connection", revealed: [] },
@@ -177,7 +182,12 @@ function checkAnswer(number) {
       document.getElementById(`riddle${number}`).classList.remove("active");
 
       if (number === 3) {
-        window.location.href = "#decodecorrect";
+        const target = document.getElementById("decodecorrect");
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth" });
+        } else {
+          window.location.hash = "decodecorrect";
+        }
       } else {
         document.getElementById(`riddle${number + 1}`).classList.add("active");
       }
