@@ -119,7 +119,6 @@
   <div class="riddle-hint" id="hint3"></div>
 </div>
 
-
 <script>
 const riddles = {
   1: { answer: "connection", revealed: [] },
@@ -178,14 +177,16 @@ function checkAnswer(number) {
       document.getElementById(`riddle${number}`).classList.remove("active");
 
       if (number === 3) {
-        // Redirect to #decodecorrect on last riddle success
-        window.location.hash = "#decodecorrect";
+        // Smooth scroll and update URL hash for Carrd compatibility
+        window.history.pushState(null, null, '#decodecorrect');
+        const el = document.querySelector('#decodecorrect');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
       } else {
         document.getElementById(`riddle${number + 1}`).classList.add("active");
       }
     }, 2000);
   } else {
-    // Add a new random unrevealed letter for hint
+    // Add a new random unrevealed letter
     const index = getRandomHiddenIndex(correct, riddle.revealed);
     if (index !== null) {
       riddle.revealed.push(index);
@@ -197,6 +198,7 @@ function checkAnswer(number) {
   }
 }
 
+// Enable Enter key to submit answers
 document.querySelectorAll(".riddle-input").forEach((inputEl, index) => {
   inputEl.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
@@ -205,4 +207,3 @@ document.querySelectorAll(".riddle-input").forEach((inputEl, index) => {
   });
 });
 </script>
-
